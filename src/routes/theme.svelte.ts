@@ -191,10 +191,6 @@ export const themes = [
 	}
 ] as const;
 
-export const darkThemes = themes.filter((t) => t.type === 'dark');
-
-export const lightThemes = themes.filter((t) => t.type === 'light');
-
 export function createTheme() {
 	type Theme = (typeof themes)[number]['id'];
 

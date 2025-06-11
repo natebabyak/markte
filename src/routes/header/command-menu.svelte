@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { Button } from '$lib/components/ui/button';
 	import * as Command from '$lib/components/ui/command';
-	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import Search from '@lucide/svelte/icons/search';
 
 	let open = $state(false);
+
+	function toggle() {
+		open = !open;
+	}
 
 	function handleKeydown(e: KeyboardEvent) {
 		if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -15,16 +19,25 @@
 
 <svelte:document onkeydown={handleKeydown} />
 
-<Button onclick={() => (open = !open)} variant="outline" class="flex justify-between">
-	<div class="flex gap-2">
+<div class="hidden md:block">
+	<Button
+		onclick={toggle}
+		variant="outline"
+		class="text-muted-foreground mr-4 cursor-pointer border-none"
+	>
 		<Search class="h-4 w-4" />
-		<p>Search commands...</p>
-	</div>
-	<kbd class="flex gap-1 text-xs">
-		<p>Ctrl</p>
-		<p>K</p>
-	</kbd>
-</Button>
+		<p class="font-normal">Search commands...</p>
+		<kbd class="flex gap-1 text-xs">
+			<p class="bg-muted rounded-sm px-1 py-0.5">Ctrl</p>
+			<p class="bg-muted rounded-sm px-1 py-0.5">K</p>
+		</kbd>
+	</Button>
+</div>
+<div class="block md:hidden">
+	<Button onclick={toggle} size="icon" variant="ghost" class="cursor-pointer">
+		<Search class="h-4 w-4" />
+	</Button>
+</div>
 <Command.Dialog bind:open>
 	<Command.Input placeholder="Type a command or search..." />
 	<Command.List>
