@@ -3,9 +3,9 @@
 	import { marked } from 'marked';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 
-	const { markdown } = $props();
+	const { markdown }: { markdown: { markdown: string } } = $props();
 
-	const html = $derived(DOMPurify.sanitize(marked(markdown, { async: false, gfm: true })));
+	const html = $derived(DOMPurify.sanitize(marked(markdown.markdown, { async: false, gfm: true })));
 </script>
 
 <ScrollArea>
