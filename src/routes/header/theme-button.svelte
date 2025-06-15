@@ -8,10 +8,10 @@
 
 <Button onclick={toggleMode} size="icon" variant="ghost" class="cursor-pointer">
 	{#if !mode.current}
-		<Skeleton class="h-4 w-4 rounded-full" />
+		<Skeleton class="size-4 rounded-full" />
 	{:else if mode.current === 'dark'}
-		<Moon class="h-4 w-4" />
+		<Moon class="size-4" />
 	{:else}
-		<Sun class="h-4 w-4" />
+		<Sun class="size-4" />
 	{/if}
 </Button>

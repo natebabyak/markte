@@ -25,7 +25,7 @@
 		variant="outline"
 		class="text-muted-foreground mr-4 cursor-pointer border-none"
 	>
-		<Search class="h-4 w-4" />
+		<Search class="size-4" />
 		<p class="font-normal">Search commands...</p>
 		<kbd class="flex gap-1 text-xs">
 			<p class="bg-muted rounded-sm px-1 py-0.5">Ctrl</p>
@@ -35,7 +35,7 @@
 </div>
 <div class="block md:hidden">
 	<Button onclick={toggle} size="icon" variant="ghost" class="cursor-pointer">
-		<Search class="h-4 w-4" />
+		<Search class="size-4" />
 	</Button>
 </div>
 <Command.Dialog bind:open>

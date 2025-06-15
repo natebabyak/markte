@@ -4,5 +4,5 @@
 </script>
 
 <Button href="https://github.com/natebabyak/markte" size="icon" variant="ghost">
-	<Github class="h-4 w-4" />
+	<Github class="size-4" />
 </Button>
