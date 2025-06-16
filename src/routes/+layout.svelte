@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import 'github-markdown-css';
 	import { ModeWatcher } from 'mode-watcher';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 
