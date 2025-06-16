@@ -22,16 +22,23 @@ export function createView() {
 			markdown(),
 			EditorView.updateListener.of((update) => {
 				if (update.docChanged) {
-					// text = update.state.doc.toString();
-					debounce(text);
+					debounce(update.state.doc.toString());
 				}
 			})
 		]
 	});
 
 	return {
-		get state() {
-			return view.state;
+		get text() {
+			return view.state.doc.toString();
+		},
+		get view() {
+			return view;
 		}
 	};
 }
+
+export type View = {
+	readonly text: string;
+	readonly view: EditorView;
+};

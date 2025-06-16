@@ -4,9 +4,14 @@
 	import Subheader from './subheader/subheader.svelte';
 	import Editor from './editor/editor.svelte';
 	import Preview from './preview/preview.svelte';
-	import { createMarkdown } from './markdown.svelte';
+	import { createView, type View } from './view.svelte';
+	import { onMount } from 'svelte';
 
-	const markdown = createMarkdown();
+	let view: View;
+
+	onMount(() => {
+		view = createView();
+	});
 </script>
 
 <div class="flex h-screen w-screen flex-col">
@@ -14,11 +19,15 @@
 	<Subheader />
 	<Resizable.PaneGroup direction="horizontal">
 		<Resizable.Pane>
-			<Editor />
+			{#if view}
+				<Editor view={view.view} />
+			{/if}
 		</Resizable.Pane>
 		<Resizable.Handle withHandle />
 		<Resizable.Pane>
-			<Preview {markdown} />
+			{#if view}
+				<Preview text={view.text} />
+			{/if}
 		</Resizable.Pane>
 	</Resizable.PaneGroup>
 </div>

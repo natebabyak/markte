@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Menubar from './menubar.svelte';
-	import Select from './select.svelte';
 	import Bold from '@lucide/svelte/icons/bold';
 	import type { Component } from 'svelte';
 	import Italic from '@lucide/svelte/icons/italic';
@@ -17,6 +16,7 @@
 	import LinkButton from './link-button.svelte';
 	import ImageButton from './image-button.svelte';
 	import TableButton from './table-button.svelte';
+	import HeadingSelect from './heading-select.svelte';
 </script>
 
 {#snippet button(Icon: Component, tooltipContent: string)}
@@ -52,7 +52,7 @@
 		{@render button(Undo_2, 'Undo (Ctrl+Z)')}
 		{@render button(Redo_2, 'Redo (Ctrl+Y)')}
 		<Separator orientation="vertical" class="mx-2" />
-		<Select />
+		<HeadingSelect />
 		<Separator orientation="vertical" class="mx-2" />
 		{@render toggle(Bold, 'Bold (Ctrl+B)')}
 		{@render toggle(Italic, 'Italic (Ctrl+I)')}
