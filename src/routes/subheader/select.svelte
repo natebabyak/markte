@@ -8,7 +8,6 @@
 	import Heading_6 from '@lucide/svelte/icons/heading-6';
 	import Pilcrow from '@lucide/svelte/icons/pilcrow';
 	import * as Select from '$lib/components/ui/select';
-	import { Separator } from '$lib/components/ui/separator';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 
 	type Heading = {
@@ -62,24 +61,21 @@
 	);
 </script>
 
-<div class="hidden md:flex">
-	<Separator orientation="vertical" class="mx-2" />
-	<Tooltip.Root>
-		<Tooltip.Trigger>
-			<Select.Root bind:value type="single">
-				<Select.Trigger>{triggerContent}</Select.Trigger>
-				<Select.Content>
-					{#each headings as { Icon, label, value }}
-						<Select.Item {value}>
-							<Icon class="mr-2 size-4" />
-							{label}
-						</Select.Item>
-					{/each}
-				</Select.Content>
-			</Select.Root>
-		</Tooltip.Trigger>
-		<Tooltip.Content>
-			<p>Headings</p>
-		</Tooltip.Content>
-	</Tooltip.Root>
-</div>
+<Tooltip.Root>
+	<Tooltip.Trigger>
+		<Select.Root bind:value type="single">
+			<Select.Trigger>{triggerContent}</Select.Trigger>
+			<Select.Content>
+				{#each headings as { Icon, label, value }}
+					<Select.Item {value}>
+						<Icon class="mr-2 size-4" />
+						{label}
+					</Select.Item>
+				{/each}
+			</Select.Content>
+		</Select.Root>
+	</Tooltip.Trigger>
+	<Tooltip.Content>
+		<p>Headings</p>
+	</Tooltip.Content>
+</Tooltip.Root>

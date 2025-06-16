@@ -28,8 +28,8 @@
 		<Search class="size-4" />
 		<p class="font-normal">Search commands...</p>
 		<kbd class="flex gap-1 text-xs">
-			<p class="bg-muted rounded-sm px-1 py-0.5">Ctrl</p>
-			<p class="bg-muted rounded-sm px-1 py-0.5">K</p>
+			<p class="bg-muted rounded-sm border px-1 py-0.5">Ctrl</p>
+			<p class="bg-muted rounded-sm border px-1 py-0.5">K</p>
 		</kbd>
 	</Button>
 </div>
