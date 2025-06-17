@@ -1,3 +1,6 @@
+import { Compartment, type Extension } from '@codemirror/state';
+import { mode } from 'mode-watcher';
+
 /* thememirror */
 import {
 	amy,
@@ -32,7 +35,14 @@ import { tokyoNightStorm } from '@ddietr/codemirror-themes/tokyo-night-storm';
 /* @codemirror/theme-one-dark */
 import { oneDark } from '@codemirror/theme-one-dark';
 
-export const themes = [
+type Theme = {
+	id: string;
+	name: string;
+	type: 'dark' | 'light';
+	value: Extension;
+};
+
+export const themes: Theme[] = [
 	{
 		id: 'amy',
 		name: 'Amy',
@@ -189,22 +199,31 @@ export const themes = [
 		type: 'light',
 		value: tomorrow
 	}
-] as const;
+];
 
 export function createTheme() {
-	type Theme = (typeof themes)[number]['id'];
+	const KEY = 'theme';
 
-	let theme: Theme = $state('githubDark');
+	let theme = $state(
+		themes.find(
+			(t) =>
+				t.id ===
+				(localStorage.getItem(KEY) ?? (mode.current === 'dark' ? 'githubDark' : 'githubLight'))
+		)
+	);
+
+	let compartment = new Compartment();
 
 	return {
+		get compartment() {},
 		get theme() {
-			return themes.find((t) => t.id === theme)!.value;
-		},
-		get themes() {
-			return themes;
+			return theme;
 		},
 		set: (newTheme: Theme) => {
 			theme = newTheme;
+			localStorage.setItem(KEY, theme);
+
+			compartment.reconfigure(themes.find((t) => t.id === theme)!.value);
 		}
 	};
 }

@@ -1,11 +1,11 @@
 import { basicSetup, EditorView } from 'codemirror';
-import { markdown } from '@codemirror/lang-markdown';
 import { createTheme } from './theme.svelte';
+import { markdown } from '@codemirror/lang-markdown';
 
 export function createView() {
-	const KEY = 'text';
-
 	const theme = createTheme();
+
+	const KEY = 'text';
 
 	let text = $state(localStorage.getItem(KEY) ?? '');
 
@@ -15,7 +15,7 @@ export function createView() {
 			basicSetup,
 			EditorView.lineWrapping,
 			markdown(),
-			theme.theme,
+			themeCompartment,
 			EditorView.updateListener.of((update) => {
 				if (update.docChanged) {
 					text = update.state.doc.toString();
@@ -29,8 +29,8 @@ export function createView() {
 		get text() {
 			return text;
 		},
-		get dom() {
-			return view.dom;
+		get view() {
+			return view;
 		}
 	};
 }

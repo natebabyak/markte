@@ -1,21 +1,14 @@
 <script lang="ts">
-	import { createView, type View } from './view.svelte';
+	import { createView } from './view.svelte';
 	import Header from './header/header.svelte';
-	import Subheader from './subheader/subheader.svelte';
-	import { onMount } from 'svelte';
 	import Main from './main/main.svelte';
+	import Subheader from './subheader/subheader.svelte';
 
-	let view: View;
-
-	onMount(() => {
-		view = createView();
-	});
+	const view = createView();
 </script>
 
-<div class="flex h-screen w-screen flex-col">
+<div class="flex flex-col">
 	<Header />
-	{#if view}
-		<Subheader {view} />
-		<Main {view} />
-	{/if}
+	<Subheader {view} />
+	<Main {view} />
 </div>
