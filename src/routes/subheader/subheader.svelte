@@ -17,6 +17,9 @@
 	import ImageButton from './image-button.svelte';
 	import TableButton from './table-button.svelte';
 	import HeadingSelect from './heading-select.svelte';
+	import type { View } from '../view.svelte';
+
+	const { view }: { view: View } = $props();
 </script>
 
 {#snippet button(Icon: Component, tooltipContent: string)}

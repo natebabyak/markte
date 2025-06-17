@@ -198,7 +198,10 @@ export function createTheme() {
 
 	return {
 		get theme() {
-			return themes.find((t) => t.id === theme);
+			return themes.find((t) => t.id === theme)!.value;
+		},
+		get themes() {
+			return themes;
 		},
 		set: (newTheme: Theme) => {
 			theme = newTheme;

@@ -1,28 +1,25 @@
 import { basicSetup, EditorView } from 'codemirror';
 import { markdown } from '@codemirror/lang-markdown';
-
-const KEY = 'text';
+import { createTheme } from './theme.svelte';
 
 export function createView() {
-	const text = $state(localStorage.getItem(KEY) ?? '');
-	let timer: number;
+	const KEY = 'text';
 
-	function debounce(newText: string) {
-		clearTimeout(timer);
-		timer = setTimeout(() => {
-			localStorage.setItem(newText, KEY);
-		}, 1_000);
-	}
+	const theme = createTheme();
+
+	let text = $state(localStorage.getItem(KEY) ?? '');
 
 	const view = new EditorView({
-		doc: text,
+		doc: localStorage.getItem(KEY) ?? '',
 		extensions: [
 			basicSetup,
 			EditorView.lineWrapping,
 			markdown(),
+			theme.theme,
 			EditorView.updateListener.of((update) => {
 				if (update.docChanged) {
-					debounce(update.state.doc.toString());
+					text = update.state.doc.toString();
+					localStorage.setItem(KEY, text);
 				}
 			})
 		]
@@ -30,15 +27,12 @@ export function createView() {
 
 	return {
 		get text() {
-			return view.state.doc.toString();
+			return text;
 		},
-		get view() {
-			return view;
+		get dom() {
+			return view.dom;
 		}
 	};
 }
 
-export type View = {
-	readonly text: string;
-	readonly view: EditorView;
-};
+export type View = ReturnType<typeof createView>;
