@@ -34,6 +34,7 @@ import { tokyoNightStorm } from '@ddietr/codemirror-themes/tokyo-night-storm';
 
 /* @codemirror/theme-one-dark */
 import { oneDark } from '@codemirror/theme-one-dark';
+import { EditorView } from 'codemirror';
 
 type Theme = {
 	id: string;
@@ -201,29 +202,38 @@ export const themes: Theme[] = [
 	}
 ];
 
+function getThemeFromId(id: string) {
+	return themes.find((t) => t.id === id)!;
+}
+
 export function createTheme() {
 	const KEY = 'theme';
 
 	let theme = $state(
-		themes.find(
-			(t) =>
-				t.id ===
-				(localStorage.getItem(KEY) ?? (mode.current === 'dark' ? 'githubDark' : 'githubLight'))
+		getThemeFromId(
+			localStorage.getItem(KEY) ?? (mode.current === 'dark' ? 'githubDark' : 'githubLight')
 		)
 	);
 
-	let compartment = new Compartment();
+	const compartment = new Compartment();
 
 	return {
-		get compartment() {},
-		get theme() {
-			return theme;
+		get compartment() {
+			return compartment.of([
+				theme.value,
+				EditorView.theme({
+					'.cm-content': {
+						paddingBottom: 'calc(100%)'
+					}
+				})
+			]);
 		},
-		set: (newTheme: Theme) => {
-			theme = newTheme;
-			localStorage.setItem(KEY, theme);
+		set: (id: string) => {
+			theme = getThemeFromId(id);
 
-			compartment.reconfigure(themes.find((t) => t.id === theme)!.value);
+			compartment.reconfigure(theme.value);
+
+			localStorage.setItem(KEY, theme.id);
 		}
 	};
 }

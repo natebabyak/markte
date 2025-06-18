@@ -11,7 +11,7 @@
 	<Popover.Trigger>
 		<Tooltip.Root>
 			<Tooltip.Trigger>
-				<Button size="icon" variant="ghost">
+				<Button size="icon" variant="ghost" class="cursor-pointer">
 					<Link_2 class="size-4" />
 				</Button>
 			</Tooltip.Trigger>
@@ -22,6 +22,7 @@
 	</Popover.Trigger>
 	<Popover.Content>
 		<div class="flex flex-col gap-4">
+			<h4 class="font-medium">Insert Link</h4>
 			<div class="flex gap-4">
 				<Label for="text">Text</Label>
 				<Input id="text" placeholder="Example Domain" />
@@ -30,7 +31,6 @@
 				<Label for="url">URL</Label>
 				<Input id="url" placeholder="https://www.example.com" />
 			</div>
-			<Button>Submit</Button>
 		</div>
 	</Popover.Content>
 </Popover.Root>

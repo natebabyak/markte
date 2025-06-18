@@ -15,7 +15,7 @@ export function createView() {
 			basicSetup,
 			EditorView.lineWrapping,
 			markdown(),
-			themeCompartment,
+			theme.compartment,
 			EditorView.updateListener.of((update) => {
 				if (update.docChanged) {
 					text = update.state.doc.toString();

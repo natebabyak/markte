@@ -3,7 +3,7 @@
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import { onMount } from 'svelte';
 
-	const { view = $bindable() }: { view: EditorView } = $props();
+	const { view }: { view: EditorView } = $props();
 
 	onMount(() => {
 		const editor = document.getElementById('editor');
