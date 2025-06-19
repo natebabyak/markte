@@ -12,16 +12,15 @@
 	import List from '@lucide/svelte/icons/list';
 	import ListChecks from '@lucide/svelte/icons/list-checks';
 	import ListOrdered from '@lucide/svelte/icons/list-ordered';
-	import LinkButton from './link-button.svelte';
-	import ImageButton from './image-button.svelte';
-	import TableButton from './table-button.svelte';
 	import HeadingSelect from './heading-select.svelte';
 	import type { View } from '../view.svelte';
-	import CodeButton from './code-button.svelte';
 	import Upload from '@lucide/svelte/icons/upload';
 	import Download from '@lucide/svelte/icons/download';
 	import Strikethrough from '@lucide/svelte/icons/strikethrough';
-	import BadgeButton from './badge-button.svelte';
+	import TablePopover from './table-popover.svelte';
+	import ThemePopover from './theme-popover.svelte';
+	import Link_2 from '@lucide/svelte/icons/link-2';
+	import Image from '@lucide/svelte/icons/image';
 
 	const { view }: { view: View } = $props();
 </script>
@@ -58,28 +57,23 @@
 	</Tooltip.Root>
 {/snippet}
 
-<header class="flex items-center border-b p-2">
-	{@render button(Upload, 'Upload')}
-	<Separator orientation="vertical" class="mx-2" />
-	{@render button(Undo_2, 'Undo (Ctrl+Z)')}
-	{@render button(Redo_2, 'Redo (Ctrl+Y)')}
-	<Separator orientation="vertical" class="mx-2" />
-	<HeadingSelect />
-	<Separator orientation="vertical" class="mx-2" />
-	{@render toggle(Bold, 'Bold (Ctrl+B)')}
-	{@render toggle(Italic, 'Italic (Ctrl+I)')}
-	{@render toggle(Underline, 'Underline (Ctrl+U)')}
-	{@render toggle(Strikethrough, 'Strikethrough (Alt+Shift+5)')}
-	<Separator orientation="vertical" class="mx-2" />
-	<LinkButton />
-	<ImageButton />
-	<BadgeButton />
-	<TableButton />
-	<CodeButton />
-	<Separator orientation="vertical" class="mx-2" />
-	{@render button(List, 'Insert Ordered List (Ctrl+Shift+7)')}
-	{@render button(ListOrdered, 'Insert Unordered List (Ctrl+Shift+8)')}
-	{@render button(ListChecks, 'Insert Task List (Ctrl+Shift+9)')}
-	<Separator orientation="vertical" class="mx-2" />
-	{@render button(Download, 'Download')}
+<header class="flex items-center justify-between border-b p-2">
+	<div class="flex">
+		{@render button(Upload, 'Upload')}
+		{@render button(Undo_2, 'Undo (Ctrl+Z)')}
+		{@render button(Redo_2, 'Redo (Ctrl+Y)')}
+		<HeadingSelect />
+		{@render toggle(Bold, 'Bold (Ctrl+B)')}
+		{@render toggle(Italic, 'Italic (Ctrl+I)')}
+		{@render toggle(Underline, 'Underline (Ctrl+U)')}
+		{@render toggle(Strikethrough, 'Strikethrough (Alt+Shift+5)')}
+		{@render button(Link_2, 'Insert Link')}
+		{@render button(Image, 'Insert Image')}
+		<TablePopover />
+		{@render button(List, 'Insert Ordered List (Ctrl+Shift+7)')}
+		{@render button(ListOrdered, 'Insert Unordered List (Ctrl+Shift+8)')}
+		{@render button(ListChecks, 'Insert Task List (Ctrl+Shift+9)')}
+		{@render button(Download, 'Download')}
+	</div>
+	<ThemePopover />
 </header>
