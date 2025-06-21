@@ -1,4 +1,5 @@
 import { basicSetup, EditorView } from 'codemirror';
+import { EditorSelection, SelectionRange } from '@codemirror/state';
 import { createTheme } from './theme.svelte';
 import { markdown } from '@codemirror/lang-markdown';
 
@@ -31,6 +32,126 @@ export function createView() {
 		},
 		get view() {
 			return view;
+		},
+		bold() {
+			view.dispatch(
+				view.state.changeByRange((range) => ({
+					changes: [
+						{
+							from: range.from,
+							insert: '**'
+						},
+						{
+							from: range.to,
+							insert: '**'
+						}
+					],
+					range: EditorSelection.range(range.from, range.to + 4)
+				}))
+			);
+		},
+		insertLink() {
+			view.dispatch(
+				view.state.changeByRange((range) => ({
+					changes: [
+						{
+							from: range.from,
+							insert: '['
+						},
+						{
+							from: range.to,
+							insert: ']()'
+						}
+					],
+					range: EditorSelection.range(range.from + 1, range.to + 1)
+				}))
+			);
+
+			view.focus();
+		},
+		insertImage() {
+			view.dispatch(
+				view.state.changeByRange((range) => ({
+					changes: [
+						{
+							from: range.from,
+							insert: '!['
+						},
+						{
+							from: range.to,
+							insert: ']()'
+						}
+					],
+					range: EditorSelection.range(range.from + 2, range.to + 2)
+				}))
+			);
+
+			view.focus();
+		},
+		insertTable(rows: number, cols: number) {
+			let table = '';
+
+			for (let i = 0; i < rows; i++) {
+				table += '|';
+
+				for (let j = 0; j < cols; j++) {
+					table += '  |';
+				}
+
+				table += '\n';
+
+				if (i === 0) {
+					table += '|';
+
+					for (let j = 0; j < cols; j++) {
+						table += '--|';
+					}
+
+					table += '\n';
+				}
+			}
+
+			view.dispatch(view.state.replaceSelection(table));
+		},
+		insertOrderedList() {
+			view.dispatch({
+				changes: {
+					from: range,
+					insert: '* '
+				}
+			});
+
+			view.focus();
+		},
+		insertUnorderedList() {
+			view.dispatch(
+				view.state.changeByRange((range) => ({
+					changes: [
+						{
+							from: view.state.doc.lineAt(range.to).from,
+							insert: '1. '
+						}
+					],
+					range: EditorSelection.range(range.from + 2, range.to + 2)
+				}))
+			);
+
+			view.focus();
+		},
+		insertTaskList() {
+			view.dispatch(
+				view.state.changeByRange((range) => ({
+					changes: [
+						{
+							from: range.from,
+							insert: '* '
+						}
+					],
+					range: EditorSelection.range(range.from + 2, range.to + 2)
+				}))
+			);
+
+			view.focus();
 		}
 	};
 }

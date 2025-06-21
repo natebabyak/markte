@@ -25,10 +25,10 @@
 	const { view }: { view: View } = $props();
 </script>
 
-{#snippet button(Icon: Component, tooltip: string)}
+{#snippet button(Icon: Component, tooltip: string, onclick: () => void)}
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Button size="icon" variant="ghost" class="cursor-pointer">
+			<Button {onclick} size="icon" variant="ghost" class="cursor-pointer">
 				<Icon class="size-4" />
 			</Button>
 		</Tooltip.Trigger>
@@ -36,12 +36,6 @@
 			{tooltip}
 		</Tooltip.Content>
 	</Tooltip.Root>
-{/snippet}
-
-{#snippet separator()}
-	<div class="mx-2 block">
-		<Separator orientation="vertical" />
-	</div>
 {/snippet}
 
 {#snippet toggle(Icon: Component, tooltip: string)}
@@ -67,12 +61,12 @@
 		{@render toggle(Italic, 'Italic (Ctrl+I)')}
 		{@render toggle(Underline, 'Underline (Ctrl+U)')}
 		{@render toggle(Strikethrough, 'Strikethrough (Alt+Shift+5)')}
-		{@render button(Link_2, 'Insert Link')}
+		{@render button(Link_2, 'Insert Link', view.insertLink)}
 		{@render button(Image, 'Insert Image')}
-		<TablePopover />
-		{@render button(List, 'Insert Ordered List (Ctrl+Shift+7)')}
-		{@render button(ListOrdered, 'Insert Unordered List (Ctrl+Shift+8)')}
-		{@render button(ListChecks, 'Insert Task List (Ctrl+Shift+9)')}
+		<TablePopover insertTable={view.insertTable} />
+		{@render button(List, 'Insert Ordered List (Ctrl+Shift+7)', view.insertOrderedList)}
+		{@render button(ListOrdered, 'Insert Unordered List (Ctrl+Shift+8)', view.insertUnorderedList)}
+		{@render button(ListChecks, 'Insert Task List (Ctrl+Shift+9)', view.insertTaskList)}
 		{@render button(Download, 'Download')}
 	</div>
 	<ThemePopover />

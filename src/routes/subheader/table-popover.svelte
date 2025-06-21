@@ -14,7 +14,7 @@
 </script>
 
 <Popover.Root bind:open={isOpen}>
-	<Popover.Trigger onclick={() => (isOpen = true)}>
+	<Popover.Trigger>
 		<Tooltip.Root>
 			<Tooltip.Trigger>
 				<Button size="icon" variant="ghost" class="cursor-pointer">
@@ -34,7 +34,10 @@
 					<div class="flex gap-1">
 						{#each { length: 10 }, row}
 							<Button
-								onclick={() => (isOpen = false)}
+								onclick={() => {
+									insertTable(rows, cols);
+									isOpen = false;
+								}}
 								onmouseover={() => {
 									rows = row + 1;
 									cols = col + 1;
