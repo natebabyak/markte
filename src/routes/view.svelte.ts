@@ -1,7 +1,8 @@
 import { basicSetup, EditorView } from 'codemirror';
-import { EditorSelection, SelectionRange } from '@codemirror/state';
 import { createTheme } from './theme.svelte';
+import { EditorSelection } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
+import { redo, undo } from '@codemirror/commands';
 
 export function createView() {
 	const theme = createTheme();
@@ -32,6 +33,13 @@ export function createView() {
 		},
 		get view() {
 			return view;
+		},
+		upload() {},
+		undo() {
+			undo(view);
+		},
+		redo() {
+			redo(view);
 		},
 		bold() {
 			view.dispatch(
@@ -114,12 +122,17 @@ export function createView() {
 			view.dispatch(view.state.replaceSelection(table));
 		},
 		insertOrderedList() {
-			view.dispatch({
-				changes: {
-					from: range,
-					insert: '* '
-				}
-			});
+			view.dispatch(
+				view.state.changeByRange((range) => ({
+					changes: [
+						{
+							from: view.state.doc.lineAt(range.to).from,
+							insert: '1. '
+						}
+					],
+					range: EditorSelection.range(range.from + 2, range.to + 2)
+				}))
+			);
 
 			view.focus();
 		},
@@ -129,7 +142,7 @@ export function createView() {
 					changes: [
 						{
 							from: view.state.doc.lineAt(range.to).from,
-							insert: '1. '
+							insert: '* '
 						}
 					],
 					range: EditorSelection.range(range.from + 2, range.to + 2)
@@ -152,6 +165,17 @@ export function createView() {
 			);
 
 			view.focus();
+		},
+		download() {
+			const blob = new Blob([text], { type: 'text/markdown' });
+			const url = URL.createObjectURL(blob);
+
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = 'README.md';
+			a.click();
+
+			URL.revokeObjectURL(url);
 		}
 	};
 }

@@ -53,21 +53,21 @@
 
 <header class="flex items-center justify-between border-b p-2">
 	<div class="flex">
-		{@render button(Upload, 'Upload')}
-		{@render button(Undo_2, 'Undo (Ctrl+Z)')}
-		{@render button(Redo_2, 'Redo (Ctrl+Y)')}
+		{@render button(Upload, 'Upload', view.upload)}
+		{@render button(Undo_2, 'Undo (Ctrl+Z)', view.undo)}
+		{@render button(Redo_2, 'Redo (Ctrl+Y)', view.redo)}
 		<HeadingSelect />
 		{@render toggle(Bold, 'Bold (Ctrl+B)')}
 		{@render toggle(Italic, 'Italic (Ctrl+I)')}
 		{@render toggle(Underline, 'Underline (Ctrl+U)')}
 		{@render toggle(Strikethrough, 'Strikethrough (Alt+Shift+5)')}
 		{@render button(Link_2, 'Insert Link', view.insertLink)}
-		{@render button(Image, 'Insert Image')}
+		{@render button(Image, 'Insert Image', view.insertImage)}
 		<TablePopover insertTable={view.insertTable} />
 		{@render button(List, 'Insert Ordered List (Ctrl+Shift+7)', view.insertOrderedList)}
 		{@render button(ListOrdered, 'Insert Unordered List (Ctrl+Shift+8)', view.insertUnorderedList)}
 		{@render button(ListChecks, 'Insert Task List (Ctrl+Shift+9)', view.insertTaskList)}
-		{@render button(Download, 'Download')}
+		{@render button(Download, 'Download', view.download)}
 	</div>
 	<ThemePopover />
 </header>
