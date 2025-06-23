@@ -8,7 +8,7 @@
 
 <Button onclick={toggleMode} size="icon" variant="ghost" class="cursor-pointer">
 	{#if !mode.current}
-		<Skeleton class="size-4 rounded-full" />
+		<Skeleton class="size-4" />
 	{:else if mode.current === 'dark'}
 		<Moon class="size-4" />
 	{:else}

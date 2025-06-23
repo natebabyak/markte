@@ -1,13 +1,12 @@
 <script lang="ts">
-	import type { EditorView } from 'codemirror';
-	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import { onMount } from 'svelte';
+	import { ScrollArea } from '$lib/components/ui/scroll-area';
 
-	const { view }: { view: EditorView } = $props();
+	const { dom }: { dom: HTMLElement } = $props();
 
 	onMount(() => {
 		const editor = document.getElementById('editor');
-		editor?.appendChild(view.dom);
+		editor?.appendChild(dom);
 	});
 </script>
 

@@ -21,9 +21,7 @@
 					<Table_2 class="size-4" />
 				</Button>
 			</Tooltip.Trigger>
-			<Tooltip.Content>
-				<p>Insert Table</p>
-			</Tooltip.Content>
+			<Tooltip.Content>Insert Table</Tooltip.Content>
 		</Tooltip.Root>
 	</Popover.Trigger>
 	<Popover.Content class="w-fit">
