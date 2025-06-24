@@ -1,5 +1,5 @@
 import { basicSetup } from 'codemirror';
-import { Compartment, type Extension } from '@codemirror/state';
+import { Compartment, type Extension, Prec } from '@codemirror/state';
 import { EditorSelection } from '@codemirror/state';
 import { keymap } from '@codemirror/view';
 import { markdown } from '@codemirror/lang-markdown';
@@ -217,106 +217,108 @@ export function createView() {
 	const themeCompartment = new Compartment();
 
 	const customKeymap = (view: typeof methods) =>
-		keymap.of([
-			{
-				key: 'mod-Alt-0',
-				run: () => {
-					view.heading(0);
-					return true;
+		Prec.highest(
+			keymap.of([
+				{
+					key: 'mod-Alt-0',
+					run: () => {
+						view.heading(0);
+						return true;
+					}
+				},
+				{
+					key: 'mod-Alt-1',
+					run: () => {
+						view.heading(1);
+						return true;
+					}
+				},
+				{
+					key: 'mod-Alt-2',
+					run: () => {
+						view.heading(2);
+						return true;
+					}
+				},
+				{
+					key: 'mod-Alt-3',
+					run: () => {
+						view.heading(3);
+						return true;
+					}
+				},
+				{
+					key: 'mod-Alt-4',
+					run: () => {
+						view.heading(4);
+						return true;
+					}
+				},
+				{
+					key: 'mod-Alt-5',
+					run: () => {
+						view.heading(5);
+						return true;
+					}
+				},
+				{
+					key: 'mod-Alt-6',
+					run: () => {
+						view.heading(6);
+						return true;
+					}
+				},
+				{
+					key: 'mod-b',
+					run: () => {
+						view.bold();
+						return true;
+					}
+				},
+				{
+					key: 'mod-i',
+					run: () => {
+						view.italic();
+						return true;
+					}
+				},
+				{
+					key: 'mod-k',
+					run: () => {
+						view.insertLink();
+						return true;
+					}
+				},
+				{
+					key: 'mod-Shift-7',
+					run: () => {
+						view.insertOrderedList();
+						return true;
+					}
+				},
+				{
+					key: 'mod-Shift-8',
+					run: () => {
+						view.insertUnorderedList();
+						return true;
+					}
+				},
+				{
+					key: 'mod-Shift-9',
+					run: () => {
+						view.insertTaskList();
+						return true;
+					}
+				},
+				{
+					key: 'Alt-Shift-5',
+					run: () => {
+						view.strikethrough();
+						return true;
+					}
 				}
-			},
-			{
-				key: 'mod-Alt-1',
-				run: () => {
-					view.heading(1);
-					return true;
-				}
-			},
-			{
-				key: 'mod-Alt-2',
-				run: () => {
-					view.heading(2);
-					return true;
-				}
-			},
-			{
-				key: 'mod-Alt-3',
-				run: () => {
-					view.heading(3);
-					return true;
-				}
-			},
-			{
-				key: 'mod-Alt-4',
-				run: () => {
-					view.heading(4);
-					return true;
-				}
-			},
-			{
-				key: 'mod-Alt-5',
-				run: () => {
-					view.heading(5);
-					return true;
-				}
-			},
-			{
-				key: 'mod-Alt-6',
-				run: () => {
-					view.heading(6);
-					return true;
-				}
-			},
-			{
-				key: 'mod-b',
-				run: () => {
-					view.bold();
-					return true;
-				}
-			},
-			{
-				key: 'mod-i',
-				run: () => {
-					view.italic();
-					return true;
-				}
-			},
-			{
-				key: 'mod-k',
-				run: () => {
-					view.insertLink();
-					return true;
-				}
-			},
-			{
-				key: 'mod-Shift-7',
-				run: () => {
-					view.insertOrderedList();
-					return true;
-				}
-			},
-			{
-				key: 'mod-Shift-8',
-				run: () => {
-					view.insertUnorderedList();
-					return true;
-				}
-			},
-			{
-				key: 'mod-Shift-9',
-				run: () => {
-					view.insertTaskList();
-					return true;
-				}
-			},
-			{
-				key: 'Alt-Shift-5',
-				run: () => {
-					view.strikethrough();
-					return true;
-				}
-			}
-		]);
+			])
+		);
 
 	const methods = {
 		heading(level: number) {
@@ -489,12 +491,12 @@ export function createView() {
 			view.focus();
 		},
 		insertTable(rows: number, cols: number) {
-			let table = '';
+			let table = '\n';
 
-			for (let i = 0; i < rows; i++) {
+			for (let i = 0; i < cols; i++) {
 				table += '|';
 
-				for (let j = 0; j < cols; j++) {
+				for (let j = 0; j < rows; j++) {
 					table += '  |';
 				}
 
@@ -503,7 +505,7 @@ export function createView() {
 				if (i === 0) {
 					table += '|';
 
-					for (let j = 0; j < cols; j++) {
+					for (let j = 0; j < rows; j++) {
 						table += '--|';
 					}
 
@@ -513,7 +515,7 @@ export function createView() {
 
 			view.dispatch(view.state.replaceSelection(table));
 
-			view.focus();
+			setTimeout(() => view.focus(), 0);
 		},
 		insertOrderedList() {
 			view.dispatch(

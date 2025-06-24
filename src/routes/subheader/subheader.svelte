@@ -100,8 +100,8 @@
 		{@render button(Image, 'Insert Image', view.insertImage)}
 		<TablePopover insertTable={view.insertTable} />
 		{@render separator()}
-		{@render button(List, 'Ordered List (Ctrl+Shift+7)', view.insertOrderedList)}
-		{@render button(ListOrdered, 'Unordered List (Ctrl+Shift+8)', view.insertUnorderedList)}
+		{@render button(ListOrdered, 'Ordered List (Ctrl+Shift+7)', view.insertOrderedList)}
+		{@render button(List, 'Unordered List (Ctrl+Shift+8)', view.insertUnorderedList)}
 		{@render button(ListChecks, 'Task List (Ctrl+Shift+9)', view.insertTaskList)}
 		{@render separator()}
 		{@render button(Download, 'Download', view.download)}

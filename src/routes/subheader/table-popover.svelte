@@ -7,13 +7,20 @@
 
 	const { insertTable }: { insertTable: (rows: number, cols: number) => void } = $props();
 
-	let isOpen = $state(false);
+	let open = $state(false);
+
+	$effect(() => {
+		if (open === true) {
+			rows = 0;
+			cols = 0;
+		}
+	});
 
 	let rows = $state(0);
 	let cols = $state(0);
 </script>
 
-<Popover.Root bind:open={isOpen}>
+<Popover.Root bind:open>
 	<Popover.Trigger>
 		<Tooltip.Root>
 			<Tooltip.Trigger>
@@ -34,7 +41,7 @@
 							<Button
 								onclick={() => {
 									insertTable(rows, cols);
-									isOpen = false;
+									open = false;
 								}}
 								onmouseover={() => {
 									rows = row + 1;
