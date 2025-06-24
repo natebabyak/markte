@@ -95,6 +95,6 @@ http://localhost:5173/
 
 ## License
 
-Published under the [MIT](https://github.com/natebabyak/markte/blob/main/LICENSE) license.
+Published under the [MIT](https://github.com/natebabyak/markte/blob/master/LICENSE.md) license.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
