@@ -28,7 +28,7 @@
 
 ## Demo
 
-Try **markte** live in your browser [here](https://markte.pages.dev/).
+Try **markte** live in your browser [here](https://markte.vercel.app/).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
