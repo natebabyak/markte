@@ -85,24 +85,31 @@
 		{@render separator()}
 		{@render button(Undo_2, 'Undo (Ctrl+Z)', view.undo)}
 		{@render button(Redo_2, 'Redo (Ctrl+Y)', view.redo)}
-		{@render separator()}
-		{#each headingIcons as headingIcon, i}
-			{@render button(headingIcon, `${i ? `Heading ${i}` : 'Paragraph'} (Ctrl+Alt+${i})`, () =>
-				view.heading(i)
-			)}
-		{/each}
-		{@render separator()}
-		{@render button(Bold, 'Bold (Ctrl+B)', view.bold)}
-		{@render button(Italic, 'Italic (Ctrl+I)', view.italic)}
-		{@render button(Strikethrough, 'Strikethrough (Alt+Shift+5)', view.strikethrough)}
-		{@render separator()}
-		{@render button(Link_2, 'Insert Link (Ctrl+K)', view.insertLink)}
-		{@render button(Image, 'Insert Image', view.insertImage)}
-		<TablePopover insertTable={view.insertTable} />
-		{@render separator()}
-		{@render button(ListOrdered, 'Ordered List (Ctrl+Shift+7)', view.insertOrderedList)}
-		{@render button(List, 'Unordered List (Ctrl+Shift+8)', view.insertUnorderedList)}
-		{@render button(ListChecks, 'Task List (Ctrl+Shift+9)', view.insertTaskList)}
+		<div class="hidden md:flex">
+			{@render separator()}
+			{#each headingIcons as headingIcon, i}
+				{@render button(headingIcon, `${i ? `Heading ${i}` : 'Paragraph'} (Ctrl+Alt+${i})`, () =>
+					view.heading(i)
+				)}
+			{/each}
+			{@render separator()}
+			{@render button(Bold, 'Bold (Ctrl+B)', view.bold)}
+			{@render button(Italic, 'Italic (Ctrl+I)', view.italic)}
+			{@render button(Strikethrough, 'Strikethrough (Alt+Shift+5)', view.strikethrough)}
+		</div>
+		<div class="hidden sm:flex">
+			{@render separator()}
+			{@render button(Link_2, 'Insert Link (Ctrl+K)', view.insertLink)}
+			{@render button(Image, 'Insert Image', view.insertImage)}
+			<TablePopover insertTable={view.insertTable} />
+		</div>
+		<div class="hidden lg:flex">
+			{@render separator()}
+			{@render button(ListOrdered, 'Ordered List (Ctrl+Shift+7)', view.insertOrderedList)}
+			{@render button(List, 'Unordered List (Ctrl+Shift+8)', view.insertUnorderedList)}
+			{@render button(ListChecks, 'Task List (Ctrl+Shift+9)', view.insertTaskList)}
+		</div>
+
 		{@render separator()}
 		{@render button(Download, 'Download', view.download)}
 	</div>
