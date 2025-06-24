@@ -1,6 +1,7 @@
 import { basicSetup } from 'codemirror';
 import { Compartment, type Extension } from '@codemirror/state';
 import { EditorSelection } from '@codemirror/state';
+import { keymap } from '@codemirror/view';
 import { markdown } from '@codemirror/lang-markdown';
 import { mode } from 'mode-watcher';
 import { redo, undo } from '@codemirror/commands';
@@ -215,110 +216,236 @@ export function createView() {
 
 	const themeCompartment = new Compartment();
 
-	const view = new EditorView({
-		doc: localStorage.getItem('text') ?? '',
-		extensions: [
-			basicSetup,
-			EditorView.lineWrapping,
-			markdown(),
-			themeCompartment.of([
-				themes.find((t) => t.id === themeId)!.value,
-				EditorView.theme({
-					'.cm-content': {
-						paddingBottom: 'calc(100vh)'
-					}
-				})
-			]),
-			EditorView.updateListener.of((update) => {
-				if (update.docChanged) {
-					text = update.state.doc.toString();
-
-					localStorage.setItem('text', text);
+	const customKeymap = (view: typeof methods) =>
+		keymap.of([
+			{
+				key: 'mod-Alt-0',
+				run: () => {
+					view.heading(0);
+					return true;
 				}
-			})
-		]
-	});
+			},
+			{
+				key: 'mod-Alt-1',
+				run: () => {
+					view.heading(1);
+					return true;
+				}
+			},
+			{
+				key: 'mod-Alt-2',
+				run: () => {
+					view.heading(2);
+					return true;
+				}
+			},
+			{
+				key: 'mod-Alt-3',
+				run: () => {
+					view.heading(3);
+					return true;
+				}
+			},
+			{
+				key: 'mod-Alt-4',
+				run: () => {
+					view.heading(4);
+					return true;
+				}
+			},
+			{
+				key: 'mod-Alt-5',
+				run: () => {
+					view.heading(5);
+					return true;
+				}
+			},
+			{
+				key: 'mod-Alt-6',
+				run: () => {
+					view.heading(6);
+					return true;
+				}
+			},
+			{
+				key: 'mod-b',
+				run: () => {
+					view.bold();
+					return true;
+				}
+			},
+			{
+				key: 'mod-i',
+				run: () => {
+					view.italic();
+					return true;
+				}
+			},
+			{
+				key: 'mod-k',
+				run: () => {
+					view.insertLink();
+					return true;
+				}
+			},
+			{
+				key: 'mod-Shift-7',
+				run: () => {
+					view.insertOrderedList();
+					return true;
+				}
+			},
+			{
+				key: 'mod-Shift-8',
+				run: () => {
+					view.insertUnorderedList();
+					return true;
+				}
+			},
+			{
+				key: 'mod-Shift-9',
+				run: () => {
+					view.insertTaskList();
+					return true;
+				}
+			},
+			{
+				key: 'Alt-Shift-5',
+				run: () => {
+					view.strikethrough();
+					return true;
+				}
+			}
+		]);
 
-	return {
-		get dom() {
-			return view.dom;
-		},
-		get selection() {
-			return view.state.selection.main;
-		},
-		get text() {
-			return text;
-		},
-		get themeId() {
-			return themeId;
-		},
-		get view() {
-			return view;
-		},
-		upload() {},
-		undo() {
-			undo(view);
+	const methods = {
+		heading(level: number) {
+			view.dispatch(
+				view.state.changeByRange((range) => {
+					const line = view.state.doc.lineAt(range.from);
+					const newText =
+						'#'.repeat(level) + (level ? ' ' : '') + line.text.replace(/^(#{1,6})?\s*/, '');
 
-			view.focus();
-		},
-		redo() {
-			redo(view);
+					return {
+						changes: {
+							from: line.from,
+							to: line.to,
+							insert: newText
+						},
+						range: EditorSelection.cursor(line.from + newText.length)
+					};
+				})
+			);
 
 			view.focus();
 		},
 		bold() {
 			view.dispatch(
-				view.state.changeByRange((range) => ({
-					changes: [
-						{
-							from: range.from,
-							insert: '**'
-						},
-						{
-							from: range.to,
-							insert: '**'
+				view.state.changeByRange((range) => {
+					if (range.from >= 2 && range.to <= view.state.doc.length - 2) {
+						const c = view.state.sliceDoc(range.from - 2, range.to + 2);
+
+						if (
+							(c.startsWith('**') && c.endsWith('**')) ||
+							(c.startsWith('__') && c.endsWith('__'))
+						) {
+							return {
+								changes: {
+									from: range.from - 2,
+									to: range.to + 2,
+									insert: c.slice(2, c.length - 2)
+								},
+								range: EditorSelection.range(range.from - 2, range.to - 2)
+							};
 						}
-					],
-					range: EditorSelection.range(range.from + 2, range.to + 2)
-				}))
+					}
+
+					return {
+						changes: [
+							{
+								from: range.from,
+								insert: '**'
+							},
+							{
+								from: range.to,
+								insert: '**'
+							}
+						],
+						range: EditorSelection.range(range.from + 2, range.to + 2)
+					};
+				})
 			);
 
 			view.focus();
 		},
 		italic() {
 			view.dispatch(
-				view.state.changeByRange((range) => ({
-					changes: [
-						{
-							from: range.from,
-							insert: '*'
-						},
-						{
-							from: range.to,
-							insert: '*'
+				view.state.changeByRange((range) => {
+					if (range.from >= 1 && range.to <= view.state.doc.length - 1) {
+						const c = view.state.sliceDoc(range.from - 1, range.to + 1);
+
+						if ((c.startsWith('*') && c.endsWith('*')) || (c.startsWith('_') && c.endsWith('_'))) {
+							return {
+								changes: {
+									from: range.from - 1,
+									to: range.to + 1,
+									insert: c.slice(1, c.length - 1)
+								},
+								range: EditorSelection.range(range.from - 1, range.to - 1)
+							};
 						}
-					],
-					range: EditorSelection.range(range.from + 1, range.to + 1)
-				}))
+					}
+
+					return {
+						changes: [
+							{
+								from: range.from,
+								insert: '*'
+							},
+							{
+								from: range.to,
+								insert: '*'
+							}
+						],
+						range: EditorSelection.range(range.from + 1, range.to + 1)
+					};
+				})
 			);
 
 			view.focus();
 		},
 		strikethrough() {
 			view.dispatch(
-				view.state.changeByRange((range) => ({
-					changes: [
-						{
-							from: range.from,
-							insert: '~~'
-						},
-						{
-							from: range.to,
-							insert: '~~'
+				view.state.changeByRange((range) => {
+					if (range.from >= 2 && range.to <= view.state.doc.length - 2) {
+						const c = view.state.sliceDoc(range.from - 2, range.to + 2);
+
+						if (c.startsWith('~~') && c.endsWith('~~')) {
+							return {
+								changes: {
+									from: range.from - 2,
+									to: range.to + 2,
+									insert: c.slice(2, c.length - 2)
+								},
+								range: EditorSelection.range(range.from - 2, range.to - 2)
+							};
 						}
-					],
-					range: EditorSelection.range(range.from + 2, range.to + 2)
-				}))
+					}
+
+					return {
+						changes: [
+							{
+								from: range.from,
+								insert: '~~'
+							},
+							{
+								from: range.to,
+								insert: '~~'
+							}
+						],
+						range: EditorSelection.range(range.from + 2, range.to + 2)
+					};
+				})
 			);
 
 			view.focus();
@@ -390,49 +517,157 @@ export function createView() {
 		},
 		insertOrderedList() {
 			view.dispatch(
-				view.state.changeByRange((range) => ({
-					changes: [
-						{
+				view.state.changeByRange((range) => {
+					const line = view.state.doc.lineAt(range.from);
+
+					if (/^\d+\.\s*/.test(line.text)) {
+						const newLine = line.text.replace(/^\d+\.\s*/, '');
+
+						return {
+							changes: {
+								from: line.from,
+								to: line.to,
+								insert: newLine
+							},
+							range: EditorSelection.cursor(line.from + newLine.length)
+						};
+					}
+
+					return {
+						changes: {
 							from: view.state.doc.lineAt(range.to).from,
 							insert: '1. '
-						}
-					],
-					range: EditorSelection.range(range.from + 3, range.to + 3)
-				}))
+						},
+						range: EditorSelection.range(range.from + 3, range.to + 3)
+					};
+				})
 			);
 
 			view.focus();
 		},
 		insertUnorderedList() {
 			view.dispatch(
-				view.state.changeByRange((range) => ({
-					changes: [
-						{
+				view.state.changeByRange((range) => {
+					const line = view.state.doc.lineAt(range.from);
+
+					if (/^\*\s*/.test(line.text)) {
+						const newLine = line.text.replace(/^\*\s*/, '');
+
+						return {
+							changes: {
+								from: line.from,
+								to: line.to,
+								insert: newLine
+							},
+							range: EditorSelection.cursor(line.from + newLine.length)
+						};
+					}
+
+					return {
+						changes: {
 							from: view.state.doc.lineAt(range.to).from,
 							insert: '* '
-						}
-					],
-					range: EditorSelection.range(range.from + 2, range.to + 2)
-				}))
+						},
+						range: EditorSelection.range(range.from + 2, range.to + 2)
+					};
+				})
 			);
 
 			view.focus();
 		},
 		insertTaskList() {
 			view.dispatch(
-				view.state.changeByRange((range) => ({
-					changes: [
-						{
+				view.state.changeByRange((range) => {
+					const line = view.state.doc.lineAt(range.from);
+
+					if (/^-\s*\[(\s|x|X)\]\s*/.test(line.text)) {
+						const newLine = line.text.replace(/^-\s*\[(\s|x|X)\]\s*/, '');
+
+						return {
+							changes: {
+								from: line.from,
+								to: line.to,
+								insert: newLine
+							},
+							range: EditorSelection.cursor(line.from + newLine.length)
+						};
+					}
+
+					return {
+						changes: {
 							from: view.state.doc.lineAt(range.to).from,
 							insert: '- [ ] '
-						}
-					],
-					range: EditorSelection.range(range.from + 6, range.to + 6)
-				}))
+						},
+						range: EditorSelection.range(range.from + 6, range.to + 6)
+					};
+				})
 			);
 
 			view.focus();
+		}
+	};
+
+	const view = new EditorView({
+		doc: localStorage.getItem('text') ?? '',
+		extensions: [
+			basicSetup,
+			EditorView.lineWrapping,
+			markdown(),
+			customKeymap(methods),
+			themeCompartment.of([
+				themes.find((t) => t.id === themeId)!.value,
+				EditorView.theme({
+					'.cm-content': {
+						paddingBottom: 'calc(100vh - 122px - 1.2rem)'
+					}
+				})
+			]),
+			EditorView.updateListener.of((update) => {
+				if (update.docChanged) {
+					text = update.state.doc.toString();
+
+					localStorage.setItem('text', text);
+				}
+			})
+		]
+	});
+
+	return {
+		get dom() {
+			return view.dom;
 		},
+		get selection() {
+			return view.state.selection.main;
+		},
+		get text() {
+			return text;
+		},
+		get themeId() {
+			return themeId;
+		},
+		get view() {
+			return view;
+		},
+		upload(text: string) {
+			view.dispatch({
+				changes: {
+					from: 0,
+					to: view.state.doc.length,
+					insert: text
+				}
+			});
+
+			view.focus();
+		},
+		undo() {
+			undo(view);
+			view.focus();
+		},
+		redo() {
+			redo(view);
+			view.focus();
+		},
+		...methods,
 		download() {
 			const blob = new Blob([text], { type: 'text/markdown' });
 			const url = URL.createObjectURL(blob);
@@ -447,7 +682,14 @@ export function createView() {
 		changeTheme(newThemeId: string) {
 			themeId = newThemeId;
 			view.dispatch({
-				effects: themeCompartment.reconfigure(themes.find((t) => t.id === themeId)!.value)
+				effects: themeCompartment.reconfigure([
+					themes.find((t) => t.id === themeId)!.value,
+					EditorView.theme({
+						'.cm-content': {
+							paddingBottom: 'calc(100vh - 122px - 1.2rem)'
+						}
+					})
+				])
 			});
 			localStorage.setItem('theme', themeId);
 		}
