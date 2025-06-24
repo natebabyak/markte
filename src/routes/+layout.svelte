@@ -2,8 +2,11 @@
 	import '../app.css';
 	import { mode, ModeWatcher } from 'mode-watcher';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import darkCss from 'github-markdown-css/github-markdown-dark.css?url';
-	import lightCss from 'github-markdown-css/github-markdown-light.css?url';
+
+	const darkCss =
+		'https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown-dark.css';
+	const lightCss =
+		'https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown-light.css';
 
 	let { children } = $props();
 	let link: HTMLLinkElement;
